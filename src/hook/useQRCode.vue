@@ -4,7 +4,7 @@ import { isClient, toRef } from '@vueuse/shared'
 import QRCode from 'qrcode'
 import { shallowRef, watch } from 'vue'
 
-export const useQRCode = (text: MaybeRefOrGetter<string>, options?: QRCode.QRCodeToDataURLOptions) => {
+const useQRCode = (text: MaybeRefOrGetter<string>, options?: QRCode.QRCodeToDataURLOptions) => {
   const src = shallowRef<string>('')
 
   if (!isClient) return { src }
@@ -29,4 +29,6 @@ export const useQRCode = (text: MaybeRefOrGetter<string>, options?: QRCode.QRCod
 
   return { result }
 }
+
+export default useQRCode
 </script>

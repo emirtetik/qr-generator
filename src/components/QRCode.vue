@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useQRCode } from '../hook/useQRCode.vue'
+import useQRCode from '../hook/useQRCode.vue'
 import { useQRStore } from '@/store'
 
 const inputText = ref('')
