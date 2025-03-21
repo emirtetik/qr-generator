@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import {RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
+import QRCode from './components/QRCode.vue'
 </script>
 
 <template>
   <header>
 
     <div class="wrapper">
-      <HelloWorld msg="QR Kod Dönüştürücü" />
+      <QRCode msg="QR Kod Dönüştürücü" />
 
     </div>
   </header>

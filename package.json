@@ -12,12 +12,17 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@types/qz-tray": "^2.2.1",
     "@vue/shared": "^3.5.13",
     "@vueuse/core": "^13.0.0",
+    "jsprintmanager": "^7.0.2",
     "pinia": "^3.0.1",
+    "print-js": "^1.6.0",
     "qrcode": "^1.5.4",
+    "qz-tray": "^2.2.4",
     "vue": "^3.5.13",
     "vue-router": "^4.5.0",
+    "vue3-print-nb": "^0.1.4",
     "vuex": "^4.0.2"
   },
   "devDependencies": {

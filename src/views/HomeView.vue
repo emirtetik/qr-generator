@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import TheWelcome from '../components/TheWelcome.vue'
+import SaveQRCode from '../components/SaveQRCode.vue'
 </script>
 
 <template>
   <main>
-    <TheWelcome />
+    <SaveQRCode />
   </main>
 </template>
