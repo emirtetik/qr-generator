@@ -301,6 +301,7 @@ h1 {
   .generate-btn {
     width: 100%;
     justify-content: center;
+    padding: 10px 0;
   }
 
   .qr-actions {

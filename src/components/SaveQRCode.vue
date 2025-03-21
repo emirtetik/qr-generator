@@ -88,7 +88,6 @@ const handleScroll = () => {
         <div v-if="qrStore.getQRCodeItems.length === 0" class="empty-state">
           <div class="empty-icon">📱</div>
           <p>Henüz kaydedilmiş QR kod bulunmuyor</p>
-          <p class="empty-subtitle">QR kod oluşturmak için ana sayfaya dönün</p>
         </div>
 
         <div v-else class="qr-grid">
@@ -136,7 +135,7 @@ const handleScroll = () => {
   justify-content: center;
   align-items: flex-start;
   padding: 20px;
-  background: linear-gradient(135deg, #a53b1b 0%, #8b2e16 100%);
+  background: linear-gradient(135deg, #A53B1B 0%, #8B2E16 100%);
   overflow: hidden;
 }
 
