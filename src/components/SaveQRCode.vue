@@ -36,6 +36,7 @@ const printQRCode = async (item: { qrCode: string }) => {
     return
   }
   try {
+    
     const commands: qz.PrintData[] = [
       {
         data: item.qrCode,
@@ -45,7 +46,10 @@ const printQRCode = async (item: { qrCode: string }) => {
       },
     ]
 
-    var config = qz.configs.create('POS-80C')
+    const config = qz.configs.create(selectedPrinter.value, {
+      encoding: 'ISO-8859-1',
+      altPrinting: true,
+    });
     await qz.print(config, commands)
 
     console.log('Yazdırma işlemi başarılı')
@@ -86,7 +90,6 @@ const handleScroll = () => {
 
       <div @scroll="handleScroll" class="scroll-container">
         <div v-if="qrStore.getQRCodeItems.length === 0" class="empty-state">
-          <div class="empty-icon">📱</div>
           <p>Henüz kaydedilmiş QR kod bulunmuyor</p>
         </div>
 
