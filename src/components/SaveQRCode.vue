@@ -48,7 +48,6 @@ const printQRCode = async (item: { qrCode: string }) => {
 
     const config = qz.configs.create(selectedPrinter.value, {
       encoding: 'ISO-8859-1',
-      altPrinting: true,
     });
     await qz.print(config, commands)
 

@@ -93,18 +93,20 @@ const deleteQRCode = () => {
   min-height: 100vh;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   padding: 20px;
   background: linear-gradient(135deg, #A53B1B 0%, #8B2E16 100%);
+  overflow-y: auto;
 }
 
 .content-wrapper {
   width: 100%;
   max-width: 600px;
   background: white;
-  padding: 40px;
+  padding: 20px;
   border-radius: 20px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  margin: 20px auto;
 }
 
 h1 {
@@ -290,27 +292,45 @@ h1 {
 }
 
 @media (max-width: 768px) {
+  .container {
+    padding: 10px;
+    align-items: flex-start;
+  }
+
   .content-wrapper {
-    padding: 30px 20px;
+    padding: 15px;
+    margin: 10px auto;
+  }
+
+  h1 {
+    font-size: 2rem;
   }
 
   .input-container {
     flex-direction: column;
+    gap: 10px;
   }
 
   .generate-btn {
     width: 100%;
     justify-content: center;
-    padding: 10px 0;
+  }
+
+  .qr-card {
+    padding: 15px;
+  }
+
+  .qr-image {
+    max-width: 150px;
   }
 
   .qr-actions {
     flex-direction: column;
+    gap: 8px;
   }
 
   .action-btn {
     width: 100%;
-    justify-content: center;
   }
 }
 </style>
