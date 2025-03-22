@@ -97,6 +97,8 @@ const deleteQRCode = () => {
   padding: 20px;
   background: linear-gradient(135deg, #A53B1B 0%, #8B2E16 100%);
   overflow-y: auto;
+  position: relative;
+  z-index: 1;
 }
 
 .content-wrapper {
@@ -107,6 +109,8 @@ const deleteQRCode = () => {
   border-radius: 20px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   margin: 20px auto;
+  position: relative;
+  z-index: 2;
 }
 
 h1 {
@@ -295,29 +299,48 @@ h1 {
   .container {
     padding: 10px;
     align-items: flex-start;
+    min-height: auto;
+    height: auto;
   }
 
   .content-wrapper {
     padding: 15px;
     margin: 10px auto;
+    position: relative;
+    z-index: 2;
   }
 
   h1 {
-    font-size: 2rem;
+    font-size: 1.8rem;
+    margin-bottom: 8px;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+    margin-bottom: 20px;
   }
 
   .input-container {
     flex-direction: column;
     gap: 10px;
+    margin-bottom: 20px;
   }
 
   .generate-btn {
     width: 100%;
     justify-content: center;
+    padding: 12px 20px;
+  }
+
+  .qr-container {
+    margin-top: 20px;
+    position: relative;
+    z-index: 2;
   }
 
   .qr-card {
     padding: 15px;
+    margin-bottom: 20px;
   }
 
   .qr-image {
@@ -331,6 +354,7 @@ h1 {
 
   .action-btn {
     width: 100%;
+    padding: 10px 20px;
   }
 }
 </style>
