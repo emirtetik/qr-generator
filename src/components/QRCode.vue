@@ -4,6 +4,8 @@ import useQRCode from '../hook/useQRCode.vue'
 import { useQRStore } from '@/store'
 
 const inputText = ref('')
+const priceText = ref('')
+const kodText = ref('')
 const qrCode = ref('')
 const savedText = ref('')
 
@@ -17,21 +19,26 @@ const generateQR = () => {
     inputText.value = ''
   }
 }
+
 const saveQRCode = () => {
-  if (savedText.value && qrCode.value) {
+  if (savedText.value && qrCode.value && priceText.value && kodText.value) {
     try {
-      const processedLink = savedText.value.replace(/^(https?:\/\/)?(www\.)?/, "");
-      qrStore.setQRCodeItem(processedLink, qrCode.value);
+      qrStore.setQRCodeItem(kodText.value, Number(priceText.value), qrCode.value)
       savedText.value = ''
       qrCode.value = ''
+      priceText.value = ''
+      kodText.value = ''
     } catch (error) {
       console.error('Kaydetme hatası:', error)
     }
   }
 }
+
 const deleteQRCode = () => {
   qrCode.value = ''
   savedText.value = ''
+  priceText.value = ''
+  kodText.value = ''
 }
 </script>
 
@@ -52,6 +59,26 @@ const deleteQRCode = () => {
           />
           <span class="input-icon">🔗</span>
         </div>
+        <div class="input-wrapper">
+          <input
+            v-model="priceText"
+            type="number"
+            placeholder="Fiyat giriniz..."
+            class="input-field"
+            :class="{ 'has-value': priceText }"
+          />
+          <span class="input-icon">💰</span>
+        </div>
+        <div class="input-wrapper">
+          <input
+            v-model="kodText"
+            type="text"
+            placeholder="Kod giriniz..."
+            class="input-field"
+            :class="{ 'has-value': kodText }"
+          />
+          <span class="input-icon">📝</span>
+        </div>
         <button 
           @click="generateQR" 
           class="generate-btn" 
@@ -67,7 +94,8 @@ const deleteQRCode = () => {
         <div class="qr-card">
           <div class="qr-header">
             <h3>Oluşturulan QR Kod</h3>
-            <p class="qr-link">{{ savedText }}</p>
+            <p class="qr-price">Fiyat: {{ priceText }} TL</p>
+            <p class="qr-kod">Kod: {{ kodText }}</p>
           </div>
           <div class="qr-image-wrapper">
             <img :src="qrCode" alt="QR Code" class="qr-image" />
@@ -77,7 +105,11 @@ const deleteQRCode = () => {
               <span class="btn-icon">🗑️</span>
               Sil
             </button>
-            <button @click="saveQRCode" class="action-btn save-btn" :disabled="!qrCode">
+            <button 
+              @click="saveQRCode" 
+              class="action-btn save-btn" 
+              :disabled="!qrCode || !priceText || !kodText"
+            >
               <span class="btn-icon">💾</span>
               Kaydet
             </button>
@@ -130,12 +162,13 @@ h1 {
 
 .input-container {
   display: flex;
+  flex-direction: column;
   gap: 15px;
   margin-bottom: 30px;
 }
 
 .input-wrapper {
-  flex: 1;
+  width: 100%;
   position: relative;
 }
 
@@ -171,7 +204,8 @@ h1 {
 }
 
 .generate-btn {
-  padding: 0 25px;
+  width: 100%;
+  padding: 15px 25px;
   background: #A53B1B;
   color: white;
   border: none;
@@ -181,9 +215,11 @@ h1 {
   font-weight: 600;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   transition: all 0.3s ease;
   opacity: 0.7;
+  margin-top: 10px;
 }
 
 .generate-btn.active {
@@ -295,6 +331,12 @@ h1 {
   font-size: 1.2rem;
 }
 
+.qr-price, .qr-kod {
+  color: #666;
+  font-size: 0.9rem;
+  margin: 5px 0;
+}
+
 @media (max-width: 768px) {
   .container {
     padding: 10px;
@@ -321,15 +363,16 @@ h1 {
   }
 
   .input-container {
-    flex-direction: column;
     gap: 10px;
-    margin-bottom: 20px;
+  }
+
+  .input-field {
+    padding: 12px 40px 12px 15px;
   }
 
   .generate-btn {
     width: 100%;
     justify-content: center;
-    padding: 12px 20px;
   }
 
   .qr-container {

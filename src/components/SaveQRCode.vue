@@ -30,32 +30,52 @@ onMounted(() => {
 })
 
 
-const printQRCode = async (item: { qrCode: string }) => {
+const printQRCode = async (item: { qrCode: string; price: number; kod: string }) => {
   if (!selectedPrinter.value) {
-    alert('Lütfen bir yazıcı seçin!')
-    return
+    alert('Lütfen bir yazıcı seçin!');
+    return;
   }
+  
   try {
-    
-    const commands: qz.PrintData[] = [
+    const printConfig = qz.configs.create(selectedPrinter.value, {
+      encoding: 'ISO-8859-1',
+      size: { width: 2, height: 1 },
+      units: 'in',
+      interpolation: 'nearest-neighbor',
+      orientation: 'landscape',
+    });
+
+ console.log('item.price', item.price)
+    const qrText: qz.PrintData[] = [
       {
-        data: item.qrCode,
-        type: 'pixel', 
+        type: 'pixel',
         format: 'image',
         flavor: 'base64',
-      },
-    ]
+        data: item.qrCode,
+        options: {
+          pageWidth: 200,
+          pageHeight: 50,
+          language: 'escpos'
+        }
+      }
+    ];
+  const text = 'www.isiltiaydinlatma.com'
+    const footerText: qz.PrintData[] = [
+      {
+        type: 'raw',
+        format: 'command',
+        flavor: 'plain',
+        data: `${item.price}\n${item.kod}\n${text}\x1B\x61\x00\n\n`
+      }
+    ];
+    await qz.print(printConfig, qrText);
+    await qz.print(printConfig, footerText);
 
-    const config = qz.configs.create(selectedPrinter.value, {
-      encoding: 'ISO-8859-1',
-    });
-    await qz.print(config, commands)
-
-    console.log('Yazdırma işlemi başarılı')
+    console.log('Yazdırma işlemi başarılı');
   } catch (error) {
-    console.error('Yazdırma hatası:', error)
+    console.error('Yazdırma hatası:', error);
   }
-}
+};
 
 const deleteQRCode = (index: number) => {
   qrStore.deleteQRCodeItem(index)
@@ -99,7 +119,8 @@ const handleScroll = () => {
               <div v-else class="no-qr">QR Kodu yok</div>
             </div>
             <div class="qr-content">
-              <p class="qr-link" :title="item.link">{{ item.link }}</p>
+              <p class="qr-price">{{ item.price }} TL</p>
+              <p class="qr-kod">{{ item.kod }}</p>
               <div class="button-group">
                 <div class="button-row">
                   <button @click="deleteQRCode(index)" class="action-btn delete-btn" title="Sil">
@@ -221,7 +242,29 @@ select {
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
+.qr-price,
+.qr-kod {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  background: #f8f9fa;
+  padding: 8px 12px;
+  border-radius: 8px;
+  text-align: center;
+  margin: 4px 0;
+  width: 100%;
+  display: inline-block;
+}
 
+.qr-price {
+  color: black;
+  border: 1px solid #a53b1b;
+}
+
+.qr-kod {
+  color: black;
+  border: 1px solid #a53b1b;
+}
 .no-qr {
   color: #6c757d;
   font-size: 1.1rem;

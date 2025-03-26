@@ -3,7 +3,8 @@ import { defineStore, createPinia } from 'pinia';
 const pinia = createPinia();
 
 export interface QRItem {
-  link: string;
+  price: number;
+  kod: string;
   qrCode: string;
 }
 
@@ -11,13 +12,13 @@ export interface State {
   qrCodes: QRItem[];
 }
 
-const getPersistedState = () => {
+const getPersistedState = (): State => {
   const savedState = localStorage.getItem('qrStore');
-  return savedState ? JSON.parse(savedState) : null;
+  return savedState ? JSON.parse(savedState) : { qrCodes: [] };
 };
 
-const saveToLocalStorage = (state: State) => {
-  localStorage.setItem('qrStore', JSON.stringify(state));
+const saveToLocalStorage = (qrCodes: QRItem[]) => {
+  localStorage.setItem('qrStore', JSON.stringify({ qrCodes }));
 };
 
 const clearLocalStorage = () => {
@@ -25,23 +26,19 @@ const clearLocalStorage = () => {
 };
 
 export const useQRStore = defineStore('qr', {
-  state: (): State => {
-    const persistedState = getPersistedState();
-    // Ensure qrCodes is always an array, even if no persisted data exists
-    return persistedState ? { qrCodes: persistedState.qrCodes || [] } : { qrCodes: [] };
-  },
+  state: (): State => getPersistedState(),
   actions: {
-    setQRCodeItem(newLink: string, newQRCode: string) {
-      this.qrCodes.push({ link: newLink, qrCode: newQRCode });
-      saveToLocalStorage(this.$state);
+    setQRCodeItem(newKod: string, newPrice: number, newQRCode: string) {
+      this.qrCodes.push({ kod: newKod, qrCode: newQRCode, price: newPrice });
+      saveToLocalStorage(this.qrCodes);
     },
     clearQRCode() {
       this.qrCodes = [];
       clearLocalStorage();
     },
     deleteQRCodeItem(index: number) {
-      this.qrCodes.splice(index, 1);
-      saveToLocalStorage(this.$state);
+      this.qrCodes = this.qrCodes.filter((_, i) => i !== index);
+      saveToLocalStorage(this.qrCodes);
     }
   },
   getters: {
