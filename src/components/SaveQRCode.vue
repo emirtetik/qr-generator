@@ -23,29 +23,27 @@ const findPrinters = async () => {
   } catch (error) {
     console.error('Yazıcı bulma hatası:', error)
   }
-} 
+}
 
 onMounted(() => {
   findPrinters()
 })
 
-
 const printQRCode = async (item: { qrCode: string; price: number; kod: string }) => {
   if (!selectedPrinter.value) {
-    alert('Lütfen bir yazıcı seçin!');
-    return;
+    alert('Lütfen bir yazıcı seçin!')
+    return
   }
-  
+
   try {
     const printConfig = qz.configs.create(selectedPrinter.value, {
       encoding: 'ISO-8859-1',
-      size: { width: 2, height: 1 },
+      size: { width: 1, height: 0.55 },
       units: 'in',
       interpolation: 'nearest-neighbor',
-      orientation: 'landscape',
-    });
+      scaleContent: true,
+    })
 
- console.log('item.price', item.price)
     const qrText: qz.PrintData[] = [
       {
         type: 'pixel',
@@ -53,29 +51,34 @@ const printQRCode = async (item: { qrCode: string; price: number; kod: string })
         flavor: 'base64',
         data: item.qrCode,
         options: {
-          pageWidth: 200,
+          pageWidth: 100,
           pageHeight: 50,
-          language: 'escpos'
-        }
-      }
-    ];
-  const text = 'www.isiltiaydinlatma.com'
+          language: 'escpos',
+        },
+      },
+    ]
     const footerText: qz.PrintData[] = [
       {
         type: 'raw',
         format: 'command',
         flavor: 'plain',
-        data: `${item.price}\n${item.kod}\n${text}\x1B\x61\x00\n\n`
-      }
-    ];
-    await qz.print(printConfig, qrText);
-    await qz.print(printConfig, footerText);
+        options: {
+          pageWidth: 100,
+          pageHeight: 50,
+          language: 'escpos',
+        },
+        data: `\x1B\x61\x01\x1B\x61\x00\x1B\x21\x20${item.price}\n${item.kod}\n\x1B\x21\x00www.isiltiaydinlatma.com\x1B\x21\x00\n`,
+      },
+    ]
+    const text = await qz.print(printConfig, footerText)
+    const qr = await qz.print(printConfig, qrText)
 
-    console.log('Yazdırma işlemi başarılı');
+
+    console.log('Metin yazdırma işlemi başarılı')
   } catch (error) {
-    console.error('Yazdırma hatası:', error);
+    console.error('Yazdırma hatası:', error)
   }
-};
+}
 
 const deleteQRCode = (index: number) => {
   qrStore.deleteQRCodeItem(index)
@@ -134,7 +137,11 @@ const handleScroll = () => {
                     <span class="btn-icon"><DownloadIcon /></span>
                   </button>
                 </div>
-                <button @click="printQRCode(item)" class="action-btn print-btn full-width" title="Yazdır">
+                <button
+                  @click="printQRCode(item)"
+                  class="action-btn print-btn full-width"
+                  title="Yazdır"
+                >
                   <span class="btn-icon"><PrinterIcon /></span>
                 </button>
               </div>
@@ -158,7 +165,7 @@ const handleScroll = () => {
   justify-content: center;
   align-items: flex-start;
   padding: 20px;
-  background: linear-gradient(135deg, #A53B1B 0%, #8B2E16 100%);
+  background: linear-gradient(135deg, #a53b1b 0%, #8b2e16 100%);
   overflow: hidden;
 }
 
@@ -330,9 +337,8 @@ select {
   color: white;
 }
 
-
 .delete-btn {
-  background: #7D0A0A;
+  background: #7d0a0a;
   color: white;
 }
 
